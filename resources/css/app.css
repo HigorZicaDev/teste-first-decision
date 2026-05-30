@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+@import "starting-point-ui";
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+@theme {
+    /* Font */
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Backgrounds */
+    --color-background-light: #f6f6f8;
+    --color-background-dark: #101622;
+
+}
