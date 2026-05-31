@@ -16,6 +16,11 @@
         <span class="bg-card px-2 text-muted-foreground">Continue</span>
       </div>
     </div>
+    @if (session('error'))
+        <div class="alert alert-destructive" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
     <form class="field-group" action="{{route('login.auth')}}" method="post">
         @csrf
         <div class="field">
@@ -26,11 +31,18 @@
             type="email"
             placeholder="firstdecision@example.com"
             name="email"
+            value="{{ old('email') }}"
             />
+            @error('email')
+                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+            @enderror
         </div>
         <div class="field">
             <label class="label" for="password">Senha</label>
             <input class="input" id="password" type="password" name="password" />
+            @error('password')
+                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+            @enderror
         </div>
         <button class="btn btn-primary" type="submit">Entrar</button>
     </form>

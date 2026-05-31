@@ -30,12 +30,8 @@
                 <div>
 
                     <h1 class="text-2xl font-semibold">
-                        {{ $product->name }}
+                       Nome: {{ $product->name }}
                     </h1>
-
-                    <p class="text-muted-foreground">
-                        Product details
-                    </p>
 
                 </div>
 
@@ -43,7 +39,7 @@
                     href="{{ route('products.edit', $product) }}"
                     class="btn btn-outline"
                 >
-                    Edit
+                    Editar
                 </a>
 
             </div>
@@ -52,12 +48,9 @@
 
                 <div>
                     <h3 class="font-medium mb-2">
-                        Description
+                        Descriçao: {{ $product->description ?: 'No description provided.' }}
                     </h3>
 
-                    <p>
-                        {{ $product->description ?: 'No description provided.' }}
-                    </p>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-6">
@@ -65,11 +58,11 @@
                     <div>
 
                         <h3 class="font-medium mb-2">
-                            Price
+                            Preço: R$ {{ number_format($product->price, 2, ',', '.') }}
                         </h3>
 
                         <p>
-                            R$ {{ number_format($product->price, 2, ',', '.') }}
+                            
                         </p>
 
                     </div>
@@ -77,12 +70,8 @@
                     <div>
 
                         <h3 class="font-medium mb-2">
-                            Stock Quantity
+                            Quantidade em estoque: {{ $product->quantity_in_stock }}
                         </h3>
-
-                        <p>
-                            {{ $product->stock_quantity }}
-                        </p>
 
                     </div>
 

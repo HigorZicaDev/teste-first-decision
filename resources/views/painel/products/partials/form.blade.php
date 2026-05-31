@@ -2,13 +2,13 @@
 
 <div class="grid gap-6">
 
-    <div>
+    <div class="field">
 
         <label
             for="name"
             class="label"
         >
-            Name
+            Nome
         </label>
 
         <input
@@ -17,6 +17,7 @@
             name="name"
             value="{{ old('name', $product->name ?? '') }}"
             class="input"
+            required
             @error('name') aria-invalid="true" @enderror
         >
 
@@ -28,13 +29,13 @@
 
     </div>
 
-    <div>
+    <div class="field">
 
         <label
             for="description"
             class="label"
         >
-            Description
+            Descriçao
         </label>
 
         <textarea
@@ -48,43 +49,60 @@
 
     <div class="grid md:grid-cols-2 gap-6">
 
-        <div>
+        <div class="field">
 
             <label
                 for="price"
                 class="label"
             >
-                Price
+                Preço
             </label>
 
             <input
                 id="price"
                 type="number"
                 step="0.01"
+                min="0.01"
                 name="price"
                 value="{{ old('price', $product->price ?? '') }}"
                 class="input"
+                required
+                @error('price') aria-invalid="true" @enderror
             >
+
+            @error('price')
+                <p class="text-sm text-red-500 mt-1">
+                    {{ $message }}
+                </p>
+            @enderror
 
         </div>
 
-        <div>
+        <div class="field">
 
             <label
-                for="stock_quantity"
+                for="quantity_in_stock"
                 class="label"
             >
-                Stock Quantity
+                Quantidade em estoque
             </label>
 
             <input
-                id="stock_quantity"
+                id="quantity_in_stock"
                 type="number"
                 min="0"
-                name="stock_quantity"
-                value="{{ old('stock_quantity', $product->stock_quantity ?? '') }}"
+                name="quantity_in_stock"
+                value="{{ old('quantity_in_stock', $product->quantity_in_stock ?? '') }}"
                 class="input"
+                required
+                @error('quantity_in_stock') aria-invalid="true" @enderror
             >
+
+            @error('quantity_in_stock')
+                <p class="text-sm text-red-500 mt-1">
+                    {{ $message }}
+                </p>
+            @enderror
 
         </div>
 

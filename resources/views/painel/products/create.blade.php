@@ -28,7 +28,7 @@
         <div class="card-content">
 
             <h1 class="text-xl font-semibold mb-6">
-                Create Product
+                Cadastrar Produto
             </h1>
 
             <form
@@ -44,7 +44,7 @@
                         type="submit"
                         class="btn btn-primary"
                     >
-                        Save Product
+                        Salvar Produto
                     </button>
 
                 </div>

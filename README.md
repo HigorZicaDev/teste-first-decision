@@ -1,59 +1,137 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Gerenciamento de Produtos — Laravel 12
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplicação web para gerenciamento de produtos com CRUD via interface web (Blade + Tailwind +
+[starting-point-ui](https://startingpointui.com/)) e uma API RESTful versionada protegida por
+autenticação. Desenvolvido com foco em boas práticas, arquitetura limpa e princípios SOLID.
 
-## About Laravel
+## Entidade Produto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+| Campo               | Tipo    | Regras                          |
+| ------------------- | ------- | ------------------------------- |
+| `name`              | string  | obrigatório, único              |
+| `description`       | string  | opcional                        |
+| `price`             | decimal | obrigatório, positivo (`> 0`)   |
+| `quantity_in_stock` | inteiro | obrigatório, não negativo (`>= 0`) |
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.2+ / Laravel 12
+- Autenticação web por sessão + API por token (Laravel Sanctum)
+- Frontend: Blade, Tailwind CSS v4, starting-point-ui
+- Testes: PHPUnit (SQLite em memória)
 
-## Learning Laravel
+## Arquitetura
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- **Controllers finos** — web (`App\Http\Controllers\Painel\ProductController`) e API
+  (`App\Http\Controllers\Api\V1\ProductController`).
+- **FormRequests** — validação centralizada (`StoreProductRequest`, `UpdateProductRequest`)
+  reutilizada por web e API.
+- **ProductService** — regra de negócio (create/update/delete), injetado nos dois canais (DIP).
+- **Product::scopeFilter** — montagem de busca e filtros compartilhada entre web e API (DRY).
+- **ApiResponse trait** + **ProductResource** — resposta padronizada e serialização da API.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Como executar
 
-## Laravel Sponsors
+```bash
+git clone <repo-url>
+cd teste-first-decision
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+composer install
+cp .env.example .env
+php artisan key:generate
 
-### Premium Partners
+npm install
+npm run build
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+php artisan migrate --seed
+php artisan serve
+```
 
-## Contributing
+Acesse `http://localhost:8000`.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Credenciais do seed
 
-## Code of Conduct
+- **Email:** `firstdecision@example.com`
+- **Senha:** `password123`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+O seed cria também 15 produtos de exemplo (`ProductSeeder`).
 
-## Security Vulnerabilities
+## Como executar os testes
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan test
+# ou
+vendor/bin/phpunit
+```
 
-## License
+Cobertura: Unit (Model, Service, Requests) + Feature (auth web, CRUD web, auth API, CRUD API).
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## API RESTful (v1)
+
+Base: `/api/v1`. Todas as respostas seguem o envelope:
+
+```json
+{ "data": ..., "message": "...", "errors": null }
+```
+
+### Autenticação (Bearer token)
+
+```bash
+curl -X POST http://localhost:8000/api/v1/login \
+  -H "Accept: application/json" \
+  -d "email=firstdecision@example.com&password=password123"
+```
+
+Resposta:
+
+```json
+{
+  "data": { "token": "1|xxxxx", "token_type": "Bearer" },
+  "message": "Autenticado com sucesso.",
+  "errors": null
+}
+```
+
+Use o token nas demais chamadas: `Authorization: Bearer <token>`.
+
+### Endpoints
+
+| Método | Rota                     | Descrição                              |
+| ------ | ------------------------ | -------------------------------------- |
+| POST   | `/api/v1/login`          | Autentica e emite token                |
+| POST   | `/api/v1/logout`         | Revoga o token atual                   |
+| GET    | `/api/v1/products`       | Lista paginada (busca + filtros)       |
+| POST   | `/api/v1/products`       | Cria produto                           |
+| GET    | `/api/v1/products/{id}`  | Exibe produto                          |
+| PUT    | `/api/v1/products/{id}`  | Atualiza produto                       |
+| DELETE | `/api/v1/products/{id}`  | Remove produto                         |
+
+Filtros de listagem (query params, web e API): `search`, `price_min`, `price_max`,
+`stock_min`, `stock_max`, `per_page`.
+
+Exemplo de listagem:
+
+```json
+{
+  "data": {
+    "items": [ { "id": 1, "name": "...", "price": "10.00", "quantity_in_stock": 5 } ],
+    "meta": { "current_page": 1, "last_page": 1, "per_page": 15, "total": 1 }
+  },
+  "message": "Produtos listados com sucesso.",
+  "errors": null
+}
+```
+
+Erro de validação (`422`):
+
+```json
+{
+  "data": null,
+  "message": "Os dados informados são inválidos.",
+  "errors": { "name": ["The name field is required."] }
+}
+```
+
+## Docker
+
+> Pendente — ambiente Docker (app Laravel + banco) será adicionado na sequência.

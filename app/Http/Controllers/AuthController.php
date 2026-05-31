@@ -2,55 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function login()
+    public function login(): View
     {
         return view('login');
     }
 
-    public function register()
+    public function register(): View
     {
         return view('register');
     }
 
-    public function authentication(Request $request)
+    public function store(RegisterRequest $request): RedirectResponse
     {
-        $request->validate(
-            [
-                'email' => 'required|email',
-                'password' => [
-                    'required',
-                ],
-            ],
-            [
-                'email.required' => 'O email é um campo obrigatório.',
-                'email.email' => 'Por favor digite um endereço de email válido.',
-                'password.required' => 'A senha é um campo obrigatório.',
-            ]
-        );
+        $user = User::create($request->validated());
 
+        Auth::login($user);
+
+        return redirect()
+            ->route('dashboard.index')
+            ->with('success', 'Conta criada com sucesso.');
+    }
+
+    public function authentication(LoginRequest $request): RedirectResponse
+    {
         $user = User::where('email', trim($request->email))
             ->where('is_active', true)
             ->first();
 
         if ($user && Hash::check(trim($request->password), $user->password)) {
-
             Auth::login($user);
 
             return redirect()->route('dashboard.index');
-
-        } else {
-            return redirect()->back()->with('warning', 'Login Inválido.');
         }
+
+        return redirect()
+            ->back()
+            ->with('error', 'Login inválido.');
     }
 
-    public function logout()
+    public function logout(): RedirectResponse
     {
         Auth::logout();
 

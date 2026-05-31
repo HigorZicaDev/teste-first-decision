@@ -16,16 +16,21 @@
         <span class="bg-card px-2 text-muted-foreground">Continue</span>
       </div>
     </div>
-    <form class="field-group">
+    <form class="field-group" action="{{ route('register.store') }}" method="post">
+      @csrf
       <div class="field">
-        <label class="label" for="email">Nome</label>
+        <label class="label" for="name">Nome</label>
         <input
           class="input"
           id="name"
           type="text"
           placeholder="Usuario Teste"
           name="name"
+          value="{{ old('name') }}"
         />
+        @error('name')
+          <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+        @enderror
       </div>
       <div class="field">
         <label class="label" for="email">E-mail</label>
@@ -35,13 +40,24 @@
           type="email"
           placeholder="usertest@example.com"
           name="email"
+          value="{{ old('email') }}"
         />
+        @error('email')
+          <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+        @enderror
       </div>
       <div class="field">
         <label class="label" for="password">Senha</label>
         <input class="input" id="password" type="password" name="password" />
+        @error('password')
+          <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+        @enderror
       </div>
-      <button class="btn btn-primary" type="submit">Entrar</button>
+      <div class="field">
+        <label class="label" for="password_confirmation">Confirmar senha</label>
+        <input class="input" id="password_confirmation" type="password" name="password_confirmation" />
+      </div>
+      <button class="btn btn-primary" type="submit">Criar conta</button>
     </form>
     <p class="text-sm text-center text-muted-foreground">
       Ja possui uma conta?

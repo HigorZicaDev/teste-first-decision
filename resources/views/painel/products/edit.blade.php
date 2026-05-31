@@ -26,7 +26,7 @@
         <div class="card-content">
 
             <h1 class="text-xl font-semibold mb-6">
-                Edit Product
+                Editar Produto
             </h1>
 
             <form
@@ -44,7 +44,7 @@
                         type="submit"
                         class="btn btn-primary"
                     >
-                        Update Product
+                        Editar Produto
                     </button>
 
                 </div>

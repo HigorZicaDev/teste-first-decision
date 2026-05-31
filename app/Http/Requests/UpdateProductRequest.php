@@ -47,7 +47,7 @@ class UpdateProductRequest extends FormRequest
                 'gt:0',
             ],
 
-            'stock_quantity' => [
+            'quantity_in_stock' => [
                 'required',
                 'integer',
                 'min:0',
