@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Teste First Decision</title>
     {{-- FAVICON --}}
-    <link rel="shortcut icon" href="{{asset('images/sticker-logo.png')}}" type="image/x-png">
+    <link rel="shortcut icon" href="{{asset('favicon.ico')}}" type="image/x-ico">
     {{-- Fonts --}}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 

@@ -13,8 +13,8 @@
         <nav class="sidebar-menu">
           <div class="menu-group">
             <span class="menu-label">Menu</span>
-            <a href="#" class="menu-btn active">Dashboard</a>
-            <a href="#" class="menu-btn active">Produtos</a>
+            <a href="{{route('dashboard.index')}}" class="menu-btn active">Dashboard</a>
+            <a href="{{route('products.index')}}" class="menu-btn active">Produtos</a>
           </div>
           
         </nav>
