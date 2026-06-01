@@ -227,27 +227,96 @@
 
                                     <div class="dropdown-separator"></div>
 
-                                    <form
-                                        method="POST"
-                                        action="{{ route('products.destroy', $product) }}"
+                                    <button
+                                        type="button"
+                                        class="dropdown-item text-red-500"
+                                        data-sp-toggle="dialog"
+                                        data-sp-target="#delete-product-{{ $product->id }}"
                                     >
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button
-                                            type="submit"
-                                            class="dropdown-item text-red-500"
-                                        >
-                                            Excluir
-                                        </button>
-
-                                    </form>
+                                        Excluir
+                                    </button>
 
                                 </div>
 
                             </td>
 
                         </tr>
+
+                        <dialog
+                            id="delete-product-{{ $product->id }}"
+                            class="dialog"
+                            aria-labelledby="delete-product-title-{{ $product->id }}"
+                            aria-describedby="delete-product-description-{{ $product->id }}">
+
+                            <div class="dialog-backdrop"></div>
+
+                            <div class="dialog-panel">
+
+                                <button
+                                    type="button"
+                                    class="btn btn-ghost btn-icon-xs absolute top-3 right-3"
+                                    aria-label="Fechar"
+                                    data-sp-dismiss="dialog"
+                                >
+                                    ✕
+                                </button>
+
+                                <div class="dialog-content grid gap-6">
+
+                                    <div>
+
+                                        <h2
+                                            id="delete-product-title-{{ $product->id }}"
+                                            class="text-lg font-semibold tracking-tight"
+                                        >
+                                            Excluir produto
+                                        </h2>
+
+                                        <p
+                                            id="delete-product-description-{{ $product->id }}"
+                                            class="text-sm text-muted-foreground mt-2"
+                                        >
+                                            Tem certeza que deseja excluir o produto
+                                            <strong>{{ $product->name }}</strong>?
+
+                                            Esta ação não poderá ser desfeita.
+                                        </p>
+
+                                    </div>
+
+                                    <div class="grid grid-cols-1 gap-2">
+
+                                        <form
+                                            method="POST"
+                                            action="{{ route('products.destroy', $product) }}"
+                                        >
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button
+                                                type="button"
+                                                class="btn"
+                                                data-sp-dismiss="dialog"
+                                            >
+                                                Cancelar
+                                            </button>
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-destructive w-full"
+                                            >
+                                                Excluir
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </dialog>
 
                     @empty
 

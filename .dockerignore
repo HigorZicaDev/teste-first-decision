@@ -1,0 +1,15 @@
+.git
+.gitignore
+vendor
+node_modules
+public/build
+storage/logs/*
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+.env
+.env.backup
+.env.production
+.idea
+.vscode
+database/database.sqlite
